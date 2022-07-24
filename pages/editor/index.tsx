@@ -1,11 +1,12 @@
 import { getSession } from '@auth0/nextjs-auth0'
-import { ListItemButton, List, ListItem, Typography, ListItemText, Box, Divider, Button } from '@mui/material'
+import { ListItemButton, List, ListItem, Typography, ListItemText, InputLabel, Divider, Button, OutlinedInput, InputAdornment } from '@mui/material'
 import { GetServerSideProps } from 'next'
 import router from 'next/router'
 import React from 'react'
 import InlineText from '../../components/inlinetext'
 import Layout from '../../layout'
 import { RedirectToLogin } from '../../utils/redirect'
+import SearchIcon from '@mui/icons-material/Search';
 import supabaseAdmin from '../api/utils/_supabaseClient'
 
 export interface Collection {
@@ -38,6 +39,7 @@ interface EditorProps {
 const Editor = ({ collections, articles }: EditorProps) => {
     const collectionIds = Object.keys(collections);
     const articleIds = Object.keys(articles);
+    const [articleKeyword, setArticleKeyword] = React.useState('');
     return (
         <Layout title='《新红旗》编辑器'>
             <Typography variant="h5">
@@ -84,11 +86,19 @@ const Editor = ({ collections, articles }: EditorProps) => {
                 目录
             </Typography>
             <Typography>
-                点击相应文进入编辑页面。
+                点击相应文章进入编辑页面。
             </Typography>
+            <InputLabel htmlFor="outlined-adornment-amount">搜索标题关键词</InputLabel>
+            <OutlinedInput
+                id="outlined-adornment-amount"
+                value={articleKeyword}
+                onChange={(e) => setArticleKeyword(e.target.value)}
+                startAdornment={<InputAdornment position="start"><SearchIcon></SearchIcon></InputAdornment>}
+                label="搜索标题关键词"
+            />
             <List>
                 {
-                    articleIds?.map(id => (
+                    articleIds?.filter(id => articles[id].title.search(articleKeyword) !== -1).map(id => (
                         <nav key={articles[id].id}>
                             <ListItem>
                                 <ListItemButton onClick={() => router.push(`/editor/article/${articles[id].id}`)}>

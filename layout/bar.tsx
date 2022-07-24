@@ -12,7 +12,6 @@ const LayoutBar = () => {
             position='fixed'
             sx={{
                 width: '100%',
-                backdropFilter: 'blur(2px)'
             }}
         >
             <Toolbar>
