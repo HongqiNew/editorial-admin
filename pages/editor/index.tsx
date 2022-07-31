@@ -28,17 +28,11 @@ export interface Article {
 }
 
 interface EditorProps {
-    collections: {
-        [id: string]: Collection
-    }
-    articles: {
-        [id: string]: Article
-    }
+    collections: Collection[]
+    articles: Article[]
 }
 
 const Editor = ({ collections, articles }: EditorProps) => {
-    const collectionIds = Object.keys(collections);
-    const articleIds = Object.keys(articles);
     const [articleKeyword, setArticleKeyword] = React.useState('');
     return (
         <Layout title='《新红旗》编辑器'>
@@ -62,11 +56,11 @@ const Editor = ({ collections, articles }: EditorProps) => {
             <List>
                 <Divider />
                 {
-                    collectionIds?.map(id => (
-                        <nav key={collections[id].id}>
+                    collections?.map(collection => (
+                        <nav key={collection.id}>
                             <ListItem>
-                                <ListItemButton onClick={() => router.push(`/editor/collection/${collections[id].id}`)}>
-                                    <ListItemText primary={`${collections[id].title} （${new Date(collections[id].time).toLocaleDateString()}）${collections[id].id === 0 ? '（置顶）' : ''}`} />
+                                <ListItemButton onClick={() => router.push(`/editor/collection/${collection.id}`)}>
+                                    <ListItemText primary={`${collection.title} （时间：${new Date(collection.time).toLocaleDateString()}，ID：${collection.id}）${collection.id === 0 ? '（置顶）' : ''}`} />
                                 </ListItemButton>
                             </ListItem>
                             <Divider />
@@ -98,11 +92,11 @@ const Editor = ({ collections, articles }: EditorProps) => {
             />
             <List>
                 {
-                    articleIds?.filter(id => `${articles[id].title} （时间：${new Date(articles[id].time).toLocaleDateString()}，ID：${id}）`.search(articleKeyword) !== -1).map(id => (
-                        <nav key={articles[id].id}>
+                    articles?.filter(article => `${article.title} （时间：${new Date(article.time).toLocaleDateString()}，ID：${article.id}）`.search(articleKeyword) !== -1).map(article => (
+                        <nav key={article.id}>
                             <ListItem>
-                                <ListItemButton onClick={() => router.push(`/editor/article/${articles[id].id}`)}>
-                                    <ListItemText primary={`${articles[id].title} （时间：${new Date(articles[id].time).toLocaleDateString()}，ID：${id}）`} />
+                                <ListItemButton onClick={() => router.push(`/editor/article/${article.id}`)}>
+                                    <ListItemText primary={`${article.title} （时间：${new Date(article.time).toLocaleDateString()}，ID：${article.id}）`} />
                                 </ListItemButton>
                             </ListItem>
                             <Divider />
@@ -130,7 +124,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
         .order('id', { ascending: false });
 
     const [collectionsRes, articlesRes] = await Promise.all([collectionsPromise, articlesPromise]);
-    const [collections, articles] = [collectionsRes.data, articlesRes.data];
+    const [collections, articles] = [Object.values(collectionsRes.data as any), Object.values(articlesRes.data as any)];
 
     return {
         props: {
