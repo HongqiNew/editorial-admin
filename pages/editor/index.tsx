@@ -98,11 +98,11 @@ const Editor = ({ collections, articles }: EditorProps) => {
             />
             <List>
                 {
-                    articleIds?.filter(id => articles[id].title.search(articleKeyword) !== -1).map(id => (
+                    articleIds?.filter(id => `${articles[id].title} （时间：${new Date(articles[id].time).toLocaleDateString()}，ID：${id}）`.search(articleKeyword) !== -1).map(id => (
                         <nav key={articles[id].id}>
                             <ListItem>
                                 <ListItemButton onClick={() => router.push(`/editor/article/${articles[id].id}`)}>
-                                    <ListItemText primary={`${articles[id].title} （${new Date(articles[id].time).toLocaleDateString()}）`} />
+                                    <ListItemText primary={`${articles[id].title} （时间：${new Date(articles[id].time).toLocaleDateString()}，ID：${id}）`} />
                                 </ListItemButton>
                             </ListItem>
                             <Divider />
