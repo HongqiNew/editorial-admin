@@ -1,13 +1,12 @@
-import { getSession } from '@auth0/nextjs-auth0'
 import { ListItemButton, List, ListItem, Typography, ListItemText, InputLabel, Divider, Button, OutlinedInput, InputAdornment } from '@mui/material'
 import { GetServerSideProps } from 'next'
 import router from 'next/router'
 import React from 'react'
 import InlineText from '../../components/inlinetext'
 import Layout from '../../layout'
-import { RedirectToLogin } from '../../utils/redirect'
 import SearchIcon from '@mui/icons-material/Search';
 import supabaseAdmin from '../api/utils/_supabaseClient'
+import authRedirectUrl from '../../utils/auth'
 
 export interface Collection {
     download: string | undefined
@@ -109,9 +108,8 @@ const Editor = ({ collections, articles }: EditorProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    if (!getSession(ctx.req, ctx.res)) {
-        return RedirectToLogin;
-    }
+    const redirect = await authRedirectUrl(ctx);
+    if (redirect) return redirect;
 
     const collectionsPromise = supabaseAdmin
         .from('hongqicol')

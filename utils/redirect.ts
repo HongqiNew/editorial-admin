@@ -11,3 +11,10 @@ export const RedirectToEditor = {
         permanent: false,
     }
 }
+
+export const RedirectToLogout = {
+    redirect: {
+        destination: '/api/auth/logout',
+        permanent: false,
+    }
+}

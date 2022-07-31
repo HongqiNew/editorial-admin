@@ -1,4 +1,3 @@
-import { getSession } from '@auth0/nextjs-auth0';
 import { Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Link } from '@mui/material'
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -8,7 +7,7 @@ import TextInput from '../../../components/input';
 import Layout from '../../../layout';
 import post from '../../../utils/api';
 import { checkIfEmpty } from '../../../utils/checker';
-import { RedirectToLogin } from '../../../utils/redirect';
+import authRedirectUrl from "../../../utils/auth";
 import supabaseAdmin from '../../api/utils/_supabaseClient';
 
 interface ArticleEditorProps {
@@ -143,9 +142,8 @@ const ArticleEditor = ({ article }: ArticleEditorProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    if (!getSession(ctx.req, ctx.res)) {
-        return RedirectToLogin;
-    }
+    const redirect = await authRedirectUrl(ctx);
+    if (redirect) return redirect;
 
     const id = ctx.query.id as string;
     const articleData = await supabaseAdmin
@@ -157,7 +155,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
         props: {
             article: articleData.data
         }
-    };
+    }
 }
 
 export default ArticleEditor;

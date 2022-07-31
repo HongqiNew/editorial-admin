@@ -9,7 +9,7 @@ const isAdmin = async (session: Session) => {
         scope: 'read:users read:users_app_metadata',
     })
     const userInfo = await client.getUser({ id: session.user.sub });
-    return userInfo.app_metadata?.admin;
+    return Boolean(userInfo.app_metadata?.admin);
 }
 
 export default isAdmin;

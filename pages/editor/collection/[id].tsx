@@ -1,4 +1,3 @@
-import { getSession } from '@auth0/nextjs-auth0';
 import { Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -8,8 +7,8 @@ import TextInput from '../../../components/input';
 import Layout from '../../../layout';
 import post from '../../../utils/api';
 import { checkIfEmpty, checkIfURLInvalid, optionally } from '../../../utils/checker';
-import { RedirectToLogin } from '../../../utils/redirect';
 import supabaseAdmin from '../../api/utils/_supabaseClient';
+import authRedirectUrl from "../../../utils/auth";
 
 type CollectionEditorProps = {
     collection: Collection
@@ -138,9 +137,8 @@ const CollectionEditor = ({ collection }: CollectionEditorProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    if (!getSession(ctx.req, ctx.res)) {
-        return RedirectToLogin;
-    }
+    const redirect = await authRedirectUrl(ctx);
+    if (redirect) return redirect;
 
     const id = ctx.query.id as string;
     const collectionData = await supabaseAdmin
@@ -152,7 +150,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
         props: {
             collection: collectionData.data
         }
-    };
+    }
 }
 
 export default CollectionEditor;

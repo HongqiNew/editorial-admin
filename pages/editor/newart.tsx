@@ -1,6 +1,8 @@
 import { Typography } from "@mui/material";
+import { GetServerSideProps } from "next";
 import TextInput from "../../components/input";
 import Layout from "../../layout";
+import authRedirectUrl from "../../utils/auth";
 
 const NewArt = () => {
     return (
@@ -17,6 +19,15 @@ const NewArt = () => {
             </TextInput>
         </Layout>
     );
+}
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const redirect = await authRedirectUrl(ctx);
+    if (redirect) return redirect;
+
+    return {
+        props: {}
+    }
 }
 
 export default NewArt;
