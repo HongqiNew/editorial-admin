@@ -1,12 +1,13 @@
-import { ListItemButton, List, ListItem, Typography, ListItemText, InputLabel, Divider, Button, OutlinedInput, InputAdornment } from '@mui/material'
+import { ListItemButton, List, ListItem, Typography, ListItemText, InputLabel, Divider, Button, OutlinedInput, InputAdornment, Link } from '@mui/material'
 import { GetServerSideProps } from 'next'
 import router from 'next/router'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import InlineText from '../../components/inlinetext'
 import Layout from '../../layout'
 import SearchIcon from '@mui/icons-material/Search';
 import supabaseAdmin from '../api/utils/_supabaseClient'
 import authRedirectUrl from '../../utils/auth'
+import supabasePublic from '../../utils/supabase'
 
 export interface Collection {
     download: string | undefined
@@ -32,7 +33,28 @@ interface EditorProps {
 }
 
 const Editor = ({ collections, articles }: EditorProps) => {
+
     const [articleKeyword, setArticleKeyword] = React.useState('');
+
+    const input = useRef(null);
+    const [url, setUrl] = useState('');
+    const upload = async () => {
+        const file = ((input.current as unknown as HTMLInputElement).files as FileList)[0];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+        const image = await supabasePublic.storage
+            .from('bed')
+            .upload(filePath, file);
+        const { publicURL } = supabasePublic
+            .storage
+            .from('bed')
+            .getPublicUrl(image.data?.Key.split('/')[1] as string);
+        setUrl(publicURL as string);
+    }
+    const copyUrl = async () => {
+        navigator.clipboard.writeText(url);
+    }
     return (
         <Layout title='《新红旗》编辑器'>
             <Typography variant="h5">
@@ -44,7 +66,6 @@ const Editor = ({ collections, articles }: EditorProps) => {
 
             <br></br>
             <Button variant='outlined' href='/editor/newcol'>新开一刊</Button><br></br>
-
             <br></br>
             <Typography variant='h6'>
                 目录
@@ -73,7 +94,6 @@ const Editor = ({ collections, articles }: EditorProps) => {
 
             <br></br>
             <Button variant='outlined' href='/editor/newart'>新开一文</Button><br></br>
-
             <br></br>
             <Typography variant='h6'>
                 目录
@@ -103,6 +123,27 @@ const Editor = ({ collections, articles }: EditorProps) => {
                     ))
                 }
             </List>
+
+            <br></br>
+            <Divider sx={{ boxShadow: '2px 2px 2px black' }}></Divider>
+
+            <br></br>
+            <Typography variant='h6'>文件存储</Typography>
+            <br></br>
+            <input type='file' ref={input} style={{
+                fontFamily: 'kuaile',
+                borderStyle: 'inset',
+                width: '100%'
+            }}></input>
+            <Button variant='contained' onClick={upload}>上传</Button>
+            <br></br><br></br>
+            <Link href={url} target='_blank' rel='noreferrer' sx={{
+                borderStyle: 'outset',
+                width: '100%',
+                display: 'block',
+                overflow: 'scroll'
+            }}>{url}<br></br></Link>
+            <Button variant='outlined' onClick={copyUrl}>Copy</Button>
         </Layout>
     );
 }
