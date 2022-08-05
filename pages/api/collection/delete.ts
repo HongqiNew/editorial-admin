@@ -1,4 +1,4 @@
-import { Claims, getSession, Session, withApiAuthRequired } from "@auth0/nextjs-auth0";
+import { getSession, Session, withApiAuthRequired } from "@auth0/nextjs-auth0";
 import isAdmin from "../utils/_isAdmin";
 import supabaseAdmin from "../utils/_supabaseClient";
 

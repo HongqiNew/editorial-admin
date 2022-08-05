@@ -68,7 +68,7 @@ const TextInput = (props: InputProps) => {
                 <Alert onClose={handleClose} severity={
                     success ? 'success' : 'error'
                 } sx={{ width: '100%' }}>
-                    {success ? '成功啦！' : '诶？失败了。'}
+                    {success ? '成功。' : '失败。'}
                 </Alert>
             </Snackbar>
             <br></br><br></br>
