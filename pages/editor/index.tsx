@@ -2,12 +2,12 @@ import { ListItemButton, List, ListItem, Typography, ListItemText, InputLabel, D
 import { GetServerSideProps } from 'next'
 import router from 'next/router'
 import React, { useRef, useState } from 'react'
-import InlineText from '../../components/inlineText'
 import Layout from '../../layout'
 import SearchIcon from '@mui/icons-material/Search';
 import supabaseAdmin from '../api/utils/_supabaseClient'
 import authRedirectUrl from '../../utils/auth'
 import supabasePublic from '../../utils/supabase'
+import InlineText from '../../components/inlinetext'
 
 export interface Collection {
     download: string | undefined
