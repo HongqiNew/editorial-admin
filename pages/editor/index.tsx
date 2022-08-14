@@ -16,6 +16,7 @@ export interface Collection {
     preview: string | undefined
     articles: string[] | undefined
     id: number | undefined
+    alone: boolean
 }
 
 export interface Article {

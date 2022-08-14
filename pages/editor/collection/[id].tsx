@@ -98,6 +98,19 @@ const CollectionEditor = ({ collection }: CollectionEditorProps) => {
 
             <br></br>
             <Typography>
+                是否视为单独文章发布
+            </Typography>
+            <TextInput
+                description='true / false'
+                defaultValue={collection.alone}
+                errorChecker={checkIfEmpty}
+                body={{ id }}
+                query='alone'
+                url='/api/collection/edit'
+            ></TextInput>
+
+            <br></br>
+            <Typography>
                 下载链接（选填）
             </Typography>
             <TextInput

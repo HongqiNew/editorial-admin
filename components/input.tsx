@@ -8,7 +8,7 @@ interface InputProps {
     description: React.ReactNode
     url: string
     body?: Object
-    defaultValue?: string
+    defaultValue?: string | number | boolean
     successCallback?: () => void
     [key: string]: any
 }
