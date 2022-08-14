@@ -24,7 +24,7 @@ const TextInput = (props: InputProps) => {
     }
 
     useEffect(() => {
-        setError(props.errorChecker ? props.errorChecker(value) : false);
+        setError(props.errorChecker ? props.errorChecker(value.toString()) : false);
     }, []);
 
 
