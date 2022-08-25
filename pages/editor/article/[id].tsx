@@ -6,7 +6,7 @@ import { Article } from '..';
 import TextInput from '../../../components/input';
 import Layout from '../../../layout';
 import post from '../../../utils/api';
-import { checkIfEmpty } from '../../../utils/checker';
+import { checkIfEmpty, checkIfURLInvalid, optionally } from '../../../utils/checker';
 import authRedirectUrl from "../../../utils/auth";
 import supabaseAdmin from '../../api/utils/_supabaseClient';
 
@@ -95,6 +95,19 @@ const ArticleEditor = ({ article }: ArticleEditorProps) => {
                 multiline
             ></TextInput>
 
+            <br></br>
+            <Typography>
+                封面
+            </Typography>
+            <TextInput
+                description='填完整 URL。'
+                body={{ id }}
+                defaultValue={article.cover}
+                errorChecker={value => optionally(value, checkIfURLInvalid)}
+                query='cover'
+                url='/api/article/edit'
+                multiline
+            ></TextInput>
 
             <br></br>
             <Typography>

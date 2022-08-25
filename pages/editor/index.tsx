@@ -26,6 +26,7 @@ export interface Article {
     md: string | undefined
     id: number | undefined
     tags: string[] | undefined
+    cover: string | undefined
 }
 
 interface EditorProps {
