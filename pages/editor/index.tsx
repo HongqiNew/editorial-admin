@@ -311,7 +311,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
     const collectionsPromise = supabaseAdmin 
 
-        .from('hongqicol') 
+        .from('hongqi_col') 
 
         .select('id,title,time') 
 
@@ -321,7 +321,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
     const articlesPromise = supabaseAdmin 
 
-        .from('hongqiart') 
+        .from('hongqi_art') 
 
         .select('id,title,time') 
 
