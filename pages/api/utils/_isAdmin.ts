@@ -1,5 +1,5 @@
-import { Session } from "@auth0/nextjs-auth0"; 
-import { ManagementClient } from "auth0"; 
+import { Session } from '@auth0/nextjs-auth0' 
+import { ManagementClient } from 'auth0' 
  
 const isAdmin = async (session: Session) => { 
     const client = new ManagementClient({ 
@@ -8,8 +8,8 @@ const isAdmin = async (session: Session) => {
         clientSecret: process.env.AUTH0_CLIENT_SECRET as string, 
         scope: 'read:users read:users_app_metadata', 
     }) 
-    const userInfo = await client.getUser({ id: session.user.sub }); 
-    return Boolean(userInfo.app_metadata?.admin); 
+    const userInfo = await client.getUser({ id: session.user.sub }) 
+    return Boolean(userInfo.app_metadata?.admin) 
 } 
  
-export default isAdmin;
+export default isAdmin

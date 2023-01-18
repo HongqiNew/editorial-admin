@@ -1,15 +1,15 @@
-import { getSession } from "@auth0/nextjs-auth0";
-import { GetServerSidePropsContext } from "next";
+import { getSession } from '@auth0/nextjs-auth0'
+import { GetServerSidePropsContext } from 'next'
 
 const getUser = (ctx: GetServerSidePropsContext) => {
-    const session = getSession(ctx.req, ctx.res);
+    const session = getSession(ctx.req, ctx.res)
     if (!session) {
-        return undefined;
+        return undefined
     }
     else {
-        const user = session.user;
-        return { ...user };
+        const user = session.user
+        return { ...user }
     }
 }
 
-export default getUser;
+export default getUser

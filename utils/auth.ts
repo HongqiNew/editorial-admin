@@ -1,19 +1,19 @@
-import { getSession } from "@auth0/nextjs-auth0";
-import { GetServerSidePropsContext } from "next";
-import isAdmin from "../pages/api/utils/_isAdmin";
-import { RedirectToLogin, RedirectToLogout } from "./redirect";
+import { getSession } from '@auth0/nextjs-auth0'
+import { GetServerSidePropsContext } from 'next'
+import isAdmin from '../pages/api/utils/_isAdmin'
+import { RedirectToLogin, RedirectToLogout } from './redirect'
 
 const authRedirectUrl = async (ctx: GetServerSidePropsContext) => {
-    const session = getSession(ctx.req, ctx.res);
+    const session = getSession(ctx.req, ctx.res)
     if (!session) {
-        return RedirectToLogin;
+        return RedirectToLogin
     }
     else if (!(await isAdmin(session))) {
-        return RedirectToLogout;
+        return RedirectToLogout
     }
     else {
-        return null;
+        return null
     }
 }
 
-export default authRedirectUrl;
+export default authRedirectUrl

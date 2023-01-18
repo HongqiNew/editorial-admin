@@ -1,4 +1,4 @@
-import Head from "next/head";
+import Head from 'next/head'
 
 type LayoutHeadProps = {
     title: string
@@ -30,4 +30,4 @@ const LayoutHead = ({ title }: LayoutHeadProps) => {
     )
 }
 
-export default LayoutHead;
+export default LayoutHead

@@ -3,23 +3,15 @@ import { GetServerSideProps } from 'next'
 import router from 'next/router'
 import React, { useRef, useState } from 'react'
 import Layout from '../../layout'
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from '@mui/icons-material/Search'
 import supabaseAdmin from '../api/utils/_supabaseClient'
 import authRedirectUrl from '../../utils/auth'
 import supabasePublic from '../../utils/supabase'
-import InlineText from '../../components/inlinetext'
-
-export interface Collection {
-    download: string | undefined
-    title: string
-    time: number
-    preview: string | undefined
-    articles: string[] | undefined
-    id: number | undefined
-    alone: boolean
-}
+import post from '../../utils/api'
 
 export interface Article {
+    pin: number | undefined
+    visible: boolean | undefined
     title: string
     time: number
     author: string | undefined
@@ -30,71 +22,43 @@ export interface Article {
 }
 
 interface EditorProps {
-    collections: Collection[]
     articles: Article[]
 }
 
-const Editor = ({ collections, articles }: EditorProps) => {
-    const [articleKeyword, setArticleKeyword] = React.useState('');
+const Editor = ({ articles }: EditorProps) => {
+    const [articleKeyword, setArticleKeyword] = React.useState('')
 
-    const input = useRef(null);
-    const [url, setUrl] = useState('');
+    const input = useRef(null)
+    const [url, setUrl] = useState('')
     const upload = async () => {
-        const file = ((input.current as unknown as HTMLInputElement).files as FileList)[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
+        const file = ((input.current as unknown as HTMLInputElement).files as FileList)[0]
+        const fileExt = file.name.split('.').pop()
+        const fileName = `${Math.random()}.${fileExt}`
+        const filePath = `${fileName}`
         const image = await supabasePublic.storage
             .from('bed')
-            .upload(filePath, file);
+            .upload(filePath, file)
         const { publicURL } = supabasePublic
             .storage
             .from('bed')
-            .getPublicUrl(image.data?.Key.split('/')[1] as string);
-        setUrl(publicURL as string);
+            .getPublicUrl(image.data?.Key.split('/')[1] as string)
+        setUrl(publicURL as string)
     }
     const copyUrl = async () => {
-        navigator.clipboard.writeText(url);
+        navigator.clipboard.writeText(url)
     }
     return (
         <Layout title='《新红旗》编辑器'>
-            <Typography variant="h5">
+            <Typography variant='h5'>
                 《新红旗》编辑器
             </Typography>
-            <Typography>
-                你可以在<InlineText color='blue'>上半部分</InlineText>新建<InlineText color='blue'>一刊</InlineText>，<InlineText color='green'>下半部分</InlineText>新建<InlineText color='green'>一文</InlineText>。一刊至少由一文组成。
-            </Typography>
 
             <br></br>
-            <Button variant='outlined' href='/editor/newcol'>新开一刊</Button><br></br>
-            <br></br>
-            <Typography variant='h6'>
-                目录
-            </Typography>
-            <Typography>
-                点击相应刊进入编辑页面。
-            </Typography>
-            <List>
-                <Divider />
-                {
-                    collections?.map(collection => (
-                        <nav key={collection.id}>
-                            <ListItem>
-                                <ListItemButton onClick={() => router.push(`/editor/collection/${collection.id}`)}>
-                                    <ListItemText primary={`${collection.title} （时间：${new Date(collection.time).toLocaleDateString()}，ID：${collection.id}）${collection.id === 0 ? '（置顶）' : ''}`} />
-                                </ListItemButton>
-                            </ListItem>
-                            <Divider />
-                        </nav>
-                    ))
-                }
-            </List>
-
-            <br></br>
-            <Divider sx={{ boxShadow: '2px 2px 2px black' }}></Divider>
-
-            <br></br>
-            <Button variant='outlined' href='/editor/newart'>新开一文</Button><br></br>
+            <Button variant='outlined' onClick={async () => {
+                const json = await post('/api/article/new', {}, true)
+                const { id } = json
+                router.push(`/editor/article/${id}`)
+            }}>新开一文</Button><br></br>
             <br></br>
             <Typography variant='h6'>
                 目录
@@ -102,13 +66,13 @@ const Editor = ({ collections, articles }: EditorProps) => {
             <Typography>
                 点击相应文章进入编辑页面。
             </Typography>
-            <InputLabel htmlFor="outlined-adornment-amount">搜索标题关键词</InputLabel>
+            <InputLabel htmlFor='outlined-adornment-amount'>搜索标题关键词</InputLabel>
             <OutlinedInput
-                id="outlined-adornment-amount"
+                id='outlined-adornment-amount'
                 value={articleKeyword}
                 onChange={(e) => setArticleKeyword(e.target.value)}
-                startAdornment={<InputAdornment position="start"><SearchIcon></SearchIcon></InputAdornment>}
-                label="搜索标题关键词"
+                startAdornment={<InputAdornment position='start'><SearchIcon></SearchIcon></InputAdornment>}
+                label='搜索标题关键词'
             />
             <List>
                 {
@@ -146,32 +110,23 @@ const Editor = ({ collections, articles }: EditorProps) => {
             }}>{url}<br></br></Link>
             <Button variant='outlined' onClick={copyUrl}>Copy</Button>
         </Layout>
-    );
+    )
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const redirect = await authRedirectUrl(ctx);
-    if (redirect) return redirect;
+    const redirect = await authRedirectUrl(ctx)
+    if (redirect) return redirect
 
-    const collectionsPromise = supabaseAdmin
-        .from('hongqicol')
+    const articles = (await supabaseAdmin
+        .from('art')
         .select('id,title,time')
-        .order('id', { ascending: false });
-
-    const articlesPromise = supabaseAdmin
-        .from('hongqiart')
-        .select('id,title,time')
-        .order('id', { ascending: false });
-
-    const [collectionsRes, articlesRes] = await Promise.all([collectionsPromise, articlesPromise]);
-    const [collections, articles] = [Object.values(collectionsRes.data ?? {}), Object.values(articlesRes.data ?? {})];
+        .order('id', { ascending: false })).data
 
     return {
         props: {
-            collections,
             articles
         }
     }
 }
 
-export default Editor;
+export default Editor

@@ -1,7 +1,7 @@
-import { Box, CssBaseline, Toolbar } from "@mui/material";
-import { useEffect, useState } from "react";
-import LayoutBar from "./bar";
-import LayoutHead from "./head";
+import { Box, CssBaseline, Toolbar } from '@mui/material'
+import { useEffect, useState } from 'react'
+import LayoutBar from './bar'
+import LayoutHead from './head'
 
 type LayoutProps = {
     children: React.ReactNode
@@ -9,10 +9,10 @@ type LayoutProps = {
 }
 
 const Layout = ({ children, title }: LayoutProps) => {
-    const [isMounted, setIsMounted] = useState(false);
+    const [isMounted, setIsMounted] = useState(false)
     useEffect(() => {
-        setIsMounted(true);
-    }, []);
+        setIsMounted(true)
+    }, [])
     return isMounted ? (
         <>
             <LayoutHead title={title}></LayoutHead>
@@ -41,7 +41,7 @@ const Layout = ({ children, title }: LayoutProps) => {
                 </Box>
             </Box>
         </>
-    ) : (<></>);
+    ) : (<></>)
 }
 
-export default Layout;
+export default Layout

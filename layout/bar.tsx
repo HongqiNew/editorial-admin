@@ -1,12 +1,12 @@
-import { useUser } from "@auth0/nextjs-auth0";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { AppBar, Box, IconButton, Toolbar, Typography, useTheme } from "@mui/material";
-import React from "react";
-import WestIcon from '@mui/icons-material/West';
-import router from "next/router";
+import { useUser } from '@auth0/nextjs-auth0'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import { AppBar, Box, IconButton, Toolbar, Typography, useTheme } from '@mui/material'
+import React from 'react'
+import WestIcon from '@mui/icons-material/West'
+import router from 'next/router'
 
 const LayoutBar = () => {
-    const user = useUser().user;
+    const user = useUser().user
     return (
         <AppBar
             position='fixed'
@@ -40,7 +40,7 @@ const LayoutBar = () => {
                 </IconButton>
             </Toolbar>
         </AppBar>
-    );
+    )
 }
 
-export default LayoutBar;
+export default LayoutBar

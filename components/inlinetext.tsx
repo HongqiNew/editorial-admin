@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material"
+import { Typography } from '@mui/material'
 
 interface TextProps {
     children: React.ReactNode
@@ -6,7 +6,7 @@ interface TextProps {
 }
 
 const InlineText = ({ children, color }: TextProps) => (
-    <Typography color={color} display="inline">{children}</Typography>
+    <Typography color={color} display='inline'>{children}</Typography>
 )
 
-export default InlineText;
+export default InlineText
