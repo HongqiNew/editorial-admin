@@ -97,37 +97,6 @@ const ArticleEditor = ({ article }: ArticleEditorProps) => {
 
             <br></br>
             <Typography>
-                标签
-            </Typography>
-            <TextInput
-                description={
-                    <>
-                        一行写一个。
-                    </>
-                }
-                defaultValue={article.tags?.join('\n')}
-                body={{ id }}
-                query='tags'
-                url='/api/article/edit'
-                multiline
-            ></TextInput>
-
-            <br></br>
-            <Typography>
-                置顶优先级
-            </Typography>
-            <TextInput
-                description='正整数。越小的数越先轮播。最先展示的文章可填 1。可理解为轮播的次序，即第几张，但并不严格要求递增 1。'
-                body={{ id }}
-                defaultValue={article.cover}
-                errorChecker={value => optionally(value, checkIfURLInvalid)}
-                query='pin'
-                url='/api/article/edit'
-                multiline
-            ></TextInput>
-
-            <br></br>
-            <Typography>
                 置顶优先级
             </Typography>
             <TextInput
@@ -135,9 +104,8 @@ const ArticleEditor = ({ article }: ArticleEditorProps) => {
                 body={{ id }}
                 defaultValue={article.pin}
                 errorChecker={value => optionally(value, val => val < 1)}
-                query='cover'
+                query='pin'
                 url='/api/article/edit'
-                multiline
             ></TextInput>
 
             <br></br>
@@ -151,7 +119,6 @@ const ArticleEditor = ({ article }: ArticleEditorProps) => {
                 errorChecker={val => !['true', 'false'].includes(val)}
                 query='visible'
                 url='/api/article/edit'
-                multiline
             ></TextInput>
 
             <br></br>
