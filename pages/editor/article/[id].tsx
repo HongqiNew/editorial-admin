@@ -80,6 +80,20 @@ const ArticleEditor = ({ article }: ArticleEditorProps) => {
 
             <br></br>
             <Typography>
+                封面
+            </Typography>
+            <TextInput
+                description='填完整 URL。'
+                body={{ id }}
+                defaultValue={article.cover}
+                errorChecker={value => optionally(value, checkIfURLInvalid)}
+                query='cover'
+                url='/api/article/edit'
+                multiline
+            ></TextInput>
+
+            <br></br>
+            <Typography>
                 标签
             </Typography>
             <TextInput
