@@ -89,7 +89,6 @@ const ArticleEditor = ({ article }: ArticleEditorProps) => {
                 errorChecker={value => optionally(value, checkIfURLInvalid)}
                 query='cover'
                 url='/api/article/edit'
-                multiline
             ></TextInput>
 
             <br></br>
